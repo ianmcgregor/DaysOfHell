@@ -1,0 +1,8 @@
+.settings/*
+.project
+user.properties
+/assets/*
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db

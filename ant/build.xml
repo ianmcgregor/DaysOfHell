@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project default="1. Cleanup Directories" name="Build AIR2">
+	
+	<!-- PROJECT SETTINGS -->
+	<property file="desktop.properties" />
+	
+	<mkdir dir="${publish.dir}" />
+
+	<!-- Clean existing directories -->
+	<target name="1. Cleanup Directories" description="clean up">
+		<delete dir="${publish.dir}" />
+	</target>
+
+
+	<!-- Create required directories -->
+	<target name="2. Build New Directories">
+		<mkdir dir="${publish.dir}" />
+	</target>
+
+
+	<!-- Compile SWF to build-directory for packaging -->
+	<target name="3. Compile SWF">
+		<java jar="${sdk}/${mxmlc}" fork="true" failonerror="true">
+			<arg value="-debug=false" />
+			<arg value="+flexlib=${sdk}/frameworks" />
+			<arg value="+configname=air" />
+			<arg value="-file-specs=${src.main}" />
+			<arg value="-output=${deploy.dir}/${deploy.swf}" />
+		</java>
+	</target>
+
+	<!-- Show application without packaging -->
+	<target name="5. Test Application">
+		<exec executable="${sdk}/${adl}">
+			<arg value="${application.descriptor}" />
+			<arg value="${debug_dir}" />
+		</exec>
+	</target>
+
+
+	<!-- Packaging the application to an air-file & save it in the publish directory -->
+	<target name="6. Package Application">
+		<java jar="${sdk}/${adt}" fork="true" failonerror="true">
+			<arg value="-package" />
+			<arg value="-storetype" />
+			<arg value="pkcs12" />
+			<arg value="-keystore" />
+			<arg value="${certificate}" />
+			<arg value="-storepass" />
+			<arg value="${certificate.pw}" />
+
+			<!--<arg value="-target" />
+			<arg value="bundle" />-->
+
+			<arg value="${publish.dir}/${publish.air}" />
+			<arg value="${application.descriptor}" />
+			<arg value="-C" />
+			<arg value="${deploy.dir}/" />
+			<arg value="${deploy.swf}" />
+
+			<!-- <arg value="-C" />
+			<arg value="${assets_dir}" />
+			<arg value="icons" /> -->
+		</java>
+	</target>
+
+
+</project>

@@ -1,0 +1,1 @@
+Simple AIR app to automate the task of creating 10000 unique numbered image for a friend's art project.
